@@ -1,0 +1,23 @@
+{
+  "name": "@realmjs/stack-navigator",
+  "version": "1.0.0",
+  "description": "Simple Stack Navigator for React application",
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "rm -rf dist/",
+    "build": "babel src --out-dir dist --source-maps"
+  },
+  "keywords": ["react", "navigator"],
+  "author": "Duong Nguyen (duongtdn)",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.21.5",
+    "@babel/core": "^7.22.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
+    "@babel/preset-env": "^7.22.4",
+    "@babel/preset-react": "^7.22.3"
+  }
+}
