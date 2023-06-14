@@ -3,12 +3,10 @@
 import React, { useState, useRef, useEffect } from 'react'
 
 import { StackContext } from './StackContext'
-import usePopupRoutine from './usePopup.routine'
 
 export default function StackNavigator({ stacks }) {
   const propsRef = useRef({})
   const [activeIndex, setActiveIndex] = useState(0)
-  const [popupVisible, setPopupVisible] = useState(false)
 
   const animationRef = useRef('')
   useEffect(() => { animationRef.current = '' }, [activeIndex])
@@ -17,23 +15,12 @@ export default function StackNavigator({ stacks }) {
 
   const nav = { next, previous, move, back }
 
-  const [popups, setPopups] = useState([])
-
   return (
     <div>
-      <div style = {{ display: popups.length > 0? 'block' : 'none' }}>
-      {
-        popups.map((popup, index) => (
-          <div key = {index}>
-            { popup.render() }
-          </div>
-        ))
-      }
-      </div>
       <div>
       {
         stacks.map(([id, renderFn], index) => (
-          <StackContext.Provider key = {id} value = {{ ...nav, animate, usePopup: usePopupRoutine({ addPopup, removePopup }) }}>
+          <StackContext.Provider key = {id} value = {{ ...nav, animate }}>
             {
               activeIndex === index?
                 <div className = {animationRef.current.length > 0? `w3-animate-${animationRef.current}` : ''} >
@@ -89,14 +76,6 @@ export default function StackNavigator({ stacks }) {
     if (animation)
       animationRef.current = animation
     return nav
-  }
-
-  function addPopup(popup) {
-    setPopups([...popups, popup])
-  }
-
-  function removePopup(popup) {
-    setPopups(popups.filter(p => p === popup))
   }
 
 }
