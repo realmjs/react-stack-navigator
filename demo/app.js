@@ -53,6 +53,7 @@ const YourName = () => {
   const stack = useStack()
   const [name, setName] = useState('Awesome')
   const popup = Popup.useHandler()
+  const [popupResolveValue, setPopupResolveValue] = useState('')
   return (
     <Popup.Provider
       popups = {[
@@ -63,17 +64,11 @@ const YourName = () => {
     >
       <div>
         <div className='w3-bar w3-black'>
-          <button className='w3-bar-item w3-button' onClick = {showPopup}>Popup</button>
+          <button className='w3-bar-item w3-button' onClick = {showPopup}>GetNamePopup</button>
           <button className='w3-bar-item w3-button' onClick = {timeoutPopup}>TimeoutPopup</button>
         </div>
         <p>
-          Your name
-          <input
-            type = 'text'
-            className = 'w3-input'
-            value = {name}
-            onChange = {e => setName(e.target.value)}
-          />
+          Popup Resolve Value: {popupResolveValue}
         </p>
         <p>
           <button className='w3-button w3-blue w3-round' onClick = {() => stack.next({name})}>Next</button>
@@ -88,7 +83,10 @@ const YourName = () => {
     .get('name')
     .overlay({ opacity: '0.3' })
     .show({name})
-    .then((value) => console.log(`Popup resolve: ${value}`))
+    .then((value) => {
+      setPopupResolveValue(value)
+      setName(value)
+    })
     .catch((err) => console.log(`Popup reject: ${err}`))
   }
   function timeoutPopup() {
@@ -96,7 +94,7 @@ const YourName = () => {
     .get('timeout')
     .overlay({ opacity: '0.8' })
     .show({ timeout: 2 })
-    .then((value) => console.log(`Popup resolve: ${value}`))
+    .then((value) => setPopupResolveValue(value))
 
     setTimeout(() => popup.get('timeout').resolve('timeout'), 2000)
   }
