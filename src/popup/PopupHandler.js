@@ -6,9 +6,9 @@ export default class PopupHandler {
 
   #popups = {}
 
-  createPopup(popups, injectorAction) {
+  createPopup(popups, injectedHandler) {
     popups.forEach(
-      ([name, Comp]) => this.#popups[name] = new Popup(Comp, injectorAction)
+      ([name, Comp]) => this.#popups[name] = new Popup(Comp, injectedHandler)
     )
   }
 

@@ -6,9 +6,9 @@ import PopupOverlay from './PopupOverlay'
 
 export default class Popup {
 
-  constructor(Component, injectorAction) {
+  constructor(Component, injectedHandler) {
     this.Component = Component
-    this.injectorAction = injectorAction
+    this.injectedHandler = injectedHandler
   }
 
   #animate = undefined
@@ -46,7 +46,7 @@ export default class Popup {
           </PopupOverlay>
         )
       }
-      this.injectorAction.addPopup(this.#popup)
+      this.injectedHandler.addPopup(this.#popup)
     })
   }
 
@@ -61,7 +61,7 @@ export default class Popup {
         this.#animate = undefined
         this.#overlay = { opacity: 0.5 }
         this.#props = {}
-        this.injectorAction.removePopup(this.#popup)
+        this.injectedHandler.removePopup(this.#popup)
       }
     }
   }
