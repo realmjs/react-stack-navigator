@@ -47,6 +47,22 @@ const TimeoutPopup = (props) => {
   )
 }
 
+const LongPopup = (props) => {
+  return (
+    <div style={{ marginTop: '64px', textAlign: 'center' }}>
+      <div className='w3-container w3-white w3-round' style = {{ width: '460px', margin: 'auto'}}>
+        <h2 className='w3-text-red'>Long Popup</h2>
+        {
+          [...Array(30).keys()].map((_, index) => <p key = {index}>This is a very long popup</p>)
+        }
+        <p>
+          <button className='w3-button w3-round w3-blue' onClick={() => props.resolve()}>Close</button>
+        </p>
+      </div>
+    </div>
+  )
+}
+
 const CustomToast = (props) => {
   return (
     <div style={{ marginTop: '6px', textAlign: 'center' }}>
@@ -77,14 +93,16 @@ const YourName = () => {
       <Popup.Provider
         popups = {[
           ['name', GetNamePopup],
-          ['timeout', TimeoutPopup]
+          ['timeout', TimeoutPopup],
+          ['long', LongPopup]
         ]}
         handler = {popup}
       />
       <div>
         <div className='w3-bar w3-black'>
-          <button className='w3-bar-item w3-button' onClick = {showPopup}>GetNamePopup</button>
-          <button className='w3-bar-item w3-button' onClick = {timeoutPopup}>TimeoutPopup</button>
+          <button className='w3-bar-item w3-button' onClick = {showGetNamePopup}>GetNamePopup</button>
+          <button className='w3-bar-item w3-button' onClick = {showTimeoutPopup}>TimeoutPopup</button>
+          <button className='w3-bar-item w3-button' onClick = {showLongPopup}>LongPopup</button>
           <button className='w3-bar-item w3-button' onClick = {showCustomToast}>CustomToast</button>
           <button className='w3-bar-item w3-button' onClick = {showErrorToast}>ErrorToast</button>
           <button className='w3-bar-item w3-button' onClick = {showInfoToast}>InfoToast</button>
@@ -101,7 +119,7 @@ const YourName = () => {
       </div>
     </div>
   )
-  function showPopup() {
+  function showGetNamePopup() {
     popup
     .get('name')
     .overlay({ opacity: '0.3' })
@@ -112,7 +130,7 @@ const YourName = () => {
     })
     .catch((err) => console.log(`Popup reject: ${err}`))
   }
-  function timeoutPopup() {
+  function showTimeoutPopup() {
     popup
     .get('timeout')
     .overlay({ opacity: '0.8' })
@@ -120,6 +138,13 @@ const YourName = () => {
     .then((value) => setPopupResolveValue(value))
 
     setTimeout(() => popup.get('timeout').resolve('timeout'), 2000)
+  }
+  function showLongPopup() {
+    popup
+    .get('long')
+    .overlay({ opacity: '0.8' })
+    .show()
+    .then(() => console.log('close long popup'))
   }
   function nextAfter2s() {
     setTimeout(() => {
