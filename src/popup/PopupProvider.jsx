@@ -7,6 +7,7 @@ export default function PopupProvider(props) {
   useEffect(() => {
     const { handler, popups } = props
     handler.createPopup(popups, { addPopup, removePopup })
+    return () => handler.clearPopup()
   }, [])
 
   const [popups, setPopups] = useState([])

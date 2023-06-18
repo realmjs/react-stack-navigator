@@ -12,7 +12,14 @@ export default class PopupHandler {
     )
   }
 
+  clearPopup() {
+    this.#popups = {}
+  }
+
   get(name) {
+    if (!this.#popups[name]) {
+      console.warn(`Popup ${name} is not available anymore`)
+    }
     return this.#popups[name]
   }
 
