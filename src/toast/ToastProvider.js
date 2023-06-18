@@ -1,6 +1,17 @@
 "use strict"
 
 import React, { useState, useEffect } from 'react'
+import { styled } from 'styled-components'
+
+import { flyIn } from '../animation'
+
+const Container = styled.div`
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: ${props => flyIn(props.direction,)}  0.4s;
+  ${props => props.direction}: 0;
+`
 
 export default function ToastProvider(props) {
 
@@ -11,20 +22,10 @@ export default function ToastProvider(props) {
 
   const [toast, setToast] = useState(null)
 
-  const pos = toast && toast.bottom ? 'bottom' : 'top'
+  const direction = toast && toast.bottom ? 'bottom' : 'top'
 
   return  toast !== null?
-    (
-      <div style = {{
-        position: 'fixed',
-        [pos]: 0,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: '9999',
-      }}>
-        {toast.render()}
-      </div>
-    )
+    <Container direction = {direction}>{toast.render()}</Container>
   :
     null
 

@@ -64,8 +64,12 @@ export default class Toast {
         this.#timeout = undefined
       }
       if (this.#toastQueue.length > 0) {
-        const [render, options, resolve, reject] = this.#toastQueue.shift()
-        this.#createToastToScreen(render, options, resolve, reject)
+        setTimeout(() => {
+          // this setTimeout is requred to let it render in the next event after removing the currunt toast
+          const [render, options, resolve, reject] = this.#toastQueue.shift()
+          this.#createToastToScreen(render, options, resolve, reject)
+        }, 0)
+
       }
     }
   }

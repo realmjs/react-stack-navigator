@@ -15,7 +15,8 @@
   "author": "Duong Nguyen (duongtdn)",
   "license": "MIT",
   "dependencies": {
-    "react": "^18.2.0"
+    "react": "^18.2.0",
+    "styled-components": "^6.0.0-rc.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.5",

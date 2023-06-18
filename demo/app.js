@@ -77,19 +77,14 @@ const CustomToast = (props) => {
 }
 
 import Popup from '../src/popup'
-import Toast from '../src/toast'
 
-const YourName = () => {
+const YourName = ({ toast }) => {
   const stack = useStack()
   const [name, setName] = useState('Awesome')
   const popup = Popup.useHandler()
   const [popupResolveValue, setPopupResolveValue] = useState('')
-  const toast = Toast.useToast()
   return (
     <div>
-      <Toast.Provider
-        toast = {toast}
-      />
       <Popup.Provider
         popups = {[
           ['name', GetNamePopup],
@@ -173,18 +168,21 @@ const Welcome = ({ name }) => {
   )
 }
 
+import Toast from '../src/toast'
 const Demo = () => {
-
+  const toast = Toast.useToast()
   return (
     <div className='w3-container'>
       <h1>Stack Navigator</h1>
       <StackNavigator
         stacks = {[
-          ['yourname', () => <YourName />],
-          ['welcome', (props) => <Welcome {...props} />],
+          ['yourname', () => <YourName toast = {toast} />],
+          ['welcome', (props) => <Welcome toast = {toast} {...props} />],
         ]}
       />
-
+      <Toast.Provider
+        toast = {toast}
+      />
     </div>
   )
 
