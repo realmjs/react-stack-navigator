@@ -47,25 +47,48 @@ const TimeoutPopup = (props) => {
   )
 }
 
+const CustomToast = (props) => {
+  return (
+    <div style={{ marginTop: '6px', textAlign: 'center' }}>
+      <div className='w3-container w3-blue w3-round-xxlarge' style = {{ width:'fit-content', margin: 'auto'}}>
+        <p>{props.children} <span className='cursor-pointer' style = {{ marginLeft: '6px'}} onClick={onCloseButtonClick}><i className='fas fa-times' /></span></p>
+      </div>
+    </div>
+  )
+  function onCloseButtonClick() {
+    props.resolve()
+  }
+}
+
 import Popup from '../src/popup'
+import Toast from '../src/toast'
 
 const YourName = () => {
   const stack = useStack()
   const [name, setName] = useState('Awesome')
   const popup = Popup.useHandler()
   const [popupResolveValue, setPopupResolveValue] = useState('')
+  const toast = Toast.useToast()
   return (
-    <Popup.Provider
-      popups = {[
-        ['name', GetNamePopup],
-        ['timeout', TimeoutPopup]
-      ]}
-      handler = {popup}
-    >
+    <div>
+      <Toast.Provider
+        toast = {toast}
+      />
+      <Popup.Provider
+        popups = {[
+          ['name', GetNamePopup],
+          ['timeout', TimeoutPopup]
+        ]}
+        handler = {popup}
+      />
       <div>
         <div className='w3-bar w3-black'>
           <button className='w3-bar-item w3-button' onClick = {showPopup}>GetNamePopup</button>
           <button className='w3-bar-item w3-button' onClick = {timeoutPopup}>TimeoutPopup</button>
+          <button className='w3-bar-item w3-button' onClick = {showCustomToast}>CustomToast</button>
+          <button className='w3-bar-item w3-button' onClick = {showErrorToast}>ErrorToast</button>
+          <button className='w3-bar-item w3-button' onClick = {showInfoToast}>InfoToast</button>
+          <button className='w3-bar-item w3-button' onClick = {showSuccessToast}>SuccessToast</button>
         </div>
         <p>
           Popup Resolve Value: {popupResolveValue}
@@ -76,7 +99,7 @@ const YourName = () => {
           <button className='w3-button w3-yellow w3-round' onClick = {nextAfter2s}>Next After 2s</button>
         </p>
       </div>
-    </Popup.Provider>
+    </div>
   )
   function showPopup() {
     popup
@@ -102,6 +125,18 @@ const YourName = () => {
     setTimeout(() => {
       stack.next({name})
     }, 2000)
+  }
+  function showCustomToast() {
+    toast.show((resolve, reject) => <CustomToast resolve = {resolve}>Toast message</CustomToast>, { duration: 3000, bottom: true })
+  }
+  function showErrorToast() {
+    toast.error('Error message', { closeButton: true })
+  }
+  function showInfoToast() {
+    toast.info('Info message', { duration: 3000, closeButton: false })
+  }
+  function showSuccessToast() {
+    toast.success('Success message', { duration: 3000, closeButton: false })
   }
 }
 
