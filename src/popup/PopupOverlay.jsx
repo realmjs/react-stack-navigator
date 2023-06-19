@@ -1,6 +1,13 @@
 "use strict"
 
 import React from "react"
+import { styled } from 'styled-components'
+
+import animate from '../animation'
+
+const Container = styled.div`
+  animation: ${props => animate[props.animation]()}  ${props => props.duration};
+`
 
 export default function Overlay({ opacity, children }) {
   return (
@@ -16,7 +23,12 @@ export default function Overlay({ opacity, children }) {
         background: `rgba(0, 0, 0, ${opacity})`
       }}
     >
-      {children}
+      <Container
+        animation = 'flyIn'
+        duration = '0.2s'
+      >
+        {children}
+      </Container>
     </div>
   )
 }
