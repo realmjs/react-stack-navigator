@@ -6,7 +6,7 @@ import PopupOverlay from './PopupOverlay'
 
 import { styled } from 'styled-components'
 
-import animate from '../animation'
+import animate, { extractAnimation } from '../animation'
 
 const Container = styled.div`
   animation: ${props => animate[props.animation]()}  ${props => props.duration};
@@ -21,7 +21,7 @@ export default class Popup {
 
   #animation = { type: 'stub', duration: 0 }
   animate(animation) {
-    const [type, duration] = animation.trim().split(' ').map(x => x.trim())
+    const [type, duration] = extractAnimation(animation)
     this.#animation = { type, duration }
     return this
   }

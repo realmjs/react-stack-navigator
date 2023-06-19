@@ -107,7 +107,7 @@ const YourName = ({ toast }) => {
           Popup Resolve Value: {popupResolveValue}
         </p>
         <p>
-          <button className='w3-button w3-blue w3-round' onClick = {() => stack.next({name})}>Next</button>
+          <button className='w3-button w3-blue w3-round' onClick = {() => stack.animate('flyIn 0.4s', { direction: 'right' }).next({name})}>Next</button>
           {' '}
           <button className='w3-button w3-yellow w3-round' onClick = {nextAfter2s}>Next After 2s</button>
         </p>

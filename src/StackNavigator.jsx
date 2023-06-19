@@ -4,12 +4,20 @@ import React, { useState, useRef, useEffect } from 'react'
 
 import { StackContext } from './StackContext'
 
+import { styled } from 'styled-components'
+import animate, { extractAnimation } from './animation'
+
+const Animation = styled.div`
+  position: relative;
+  animation: ${props => animate[props.animation](props.options)}  ${props => props.duration};
+`
+
 export default function StackNavigator({ stacks }) {
   const propsRef = useRef({})
   const [activeIndex, setActiveIndex] = useState(0)
 
-  const animationRef = useRef('')
-  useEffect(() => { animationRef.current = '' }, [activeIndex])
+  const animationRef = useRef({ animation: 'stub' })
+  useEffect(() => { animationRef.current = { animation: 'stub' } }, [activeIndex])
 
   const historyRef = useRef([activeIndex])
 
@@ -23,9 +31,13 @@ export default function StackNavigator({ stacks }) {
           <StackContext.Provider key = {id} value = {{ ...nav, animate }}>
             {
               activeIndex === index?
-                <div className = {animationRef.current.length > 0? `w3-animate-${animationRef.current}` : ''} >
+                <Animation
+                  animation = {animationRef.current.animation}
+                  duration = {animationRef.current.duration}
+                  options = {animationRef.current.options}
+                >
                   {renderFn(propsRef.current)}
-                </div>
+                </Animation>
               : null
             }
           </StackContext.Provider >
@@ -72,9 +84,9 @@ export default function StackNavigator({ stacks }) {
     }
   }
 
-  function animate(animation) {
-    if (animation)
-      animationRef.current = animation
+  function animate(animation, options) {
+    const [type, duration] = extractAnimation(animation)
+    animationRef.current = { animation: type, duration, options }
     return nav
   }
 
