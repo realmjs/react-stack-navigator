@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react'
 import { styled } from 'styled-components'
 
-import { flyIn } from '../animation'
+import animate from '../animation'
 
 const Container = styled.div`
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  animation: ${props => flyIn(props.direction,)}  0.4s;
+  animation: ${props => animate[props.animation](props.direction)}  ${props => props.duration};
   ${props => props.direction}: 0;
 `
 
@@ -23,9 +23,26 @@ export default function ToastProvider(props) {
   const [toast, setToast] = useState(null)
 
   const direction = toast && toast.bottom ? 'bottom' : 'top'
+  let [animation, duration] = toast && toast.animation.trim().split(' ').map(x => x.trim()) || []
+
+  if (toast) {
+    if (animate[animation] === undefined) {
+      console.warn(`Unsupported animation ${animation}`)
+      animation = 'stub'
+    }
+    if (duration === undefined) {
+      duration = animate[animation].defaultDuration
+    }
+  }
 
   return  toast !== null?
-    <Container direction = {direction}>{toast.render()}</Container>
+    <Container
+      direction = {direction}
+      animation = {animation}
+      duration = {duration}
+    >
+      {toast.render()}
+    </Container>
   :
     null
 

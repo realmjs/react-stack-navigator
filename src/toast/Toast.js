@@ -42,6 +42,7 @@ export default class Toast {
       resolve: resolve,
       reject: reject,
       bottom: options && options.bottom || false,
+      animation: options && options.animation || 'flyIn 0.4s',
     }
     this.#injectedHandler.addToast(this.#toast)
     if (options && options.duration && typeof options.duration === 'number') {

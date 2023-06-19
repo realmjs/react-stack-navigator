@@ -147,13 +147,13 @@ const YourName = ({ toast }) => {
     }, 2000)
   }
   function showCustomToast() {
-    toast.show((resolve, reject) => <CustomToast resolve = {resolve}>Toast message</CustomToast>, { duration: 3000, bottom: true })
+    toast.show((resolve, reject) => <CustomToast resolve = {resolve}>Toast message</CustomToast>, { duration: 3000, bottom: true, animation: 'flyIn 0.8s' })
   }
   function showErrorToast() {
     toast.error('Error message', { closeButton: true })
   }
   function showInfoToast() {
-    toast.info('Info message', { duration: 3000, closeButton: false })
+    toast.info('Info message', { duration: 3000, closeButton: false, animation: 'fadeIn' })
   }
   function showSuccessToast() {
     toast.success('Success message', { duration: 3000, closeButton: false })
