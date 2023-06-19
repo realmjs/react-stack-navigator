@@ -129,6 +129,7 @@ const YourName = ({ toast }) => {
   function showTimeoutPopup() {
     popup
     .get('timeout')
+    .animate('flyIn 0.4s', { direction: 'top' })
     .overlay({ opacity: '0.8' })
     .show({ timeout: 2 })
     .then((value) => setPopupResolveValue(value))

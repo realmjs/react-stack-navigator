@@ -8,8 +8,9 @@ import { styled } from 'styled-components'
 
 import animate, { extractAnimation } from '../animation'
 
-const Container = styled.div`
-  animation: ${props => animate[props.animation]()}  ${props => props.duration};
+const Animation = styled.div`
+  position: relative;
+  animation: ${props => animate[props.animation](props.options)}  ${props => props.duration};
 `
 
 export default class Popup {
@@ -20,9 +21,9 @@ export default class Popup {
   }
 
   #animation = { type: 'stub', duration: 0 }
-  animate(animation) {
+  animate(animation, options) {
     const [type, duration] = extractAnimation(animation)
-    this.#animation = { type, duration }
+    this.#animation = { type, duration, options }
     return this
   }
 
@@ -48,9 +49,10 @@ export default class Popup {
         reject: reject,
         render: () => (
           <PopupOverlay {...this.#overlay} >
-            <Container
+            <Animation
               animation = {this.#animation.type}
               duration = {this.#animation.duration}
+              options = {this.#animation.options}
             >
             {
               React.createElement(
@@ -62,7 +64,7 @@ export default class Popup {
                 }
               )
             }
-            </Container>
+            </Animation>
           </PopupOverlay>
         )
       }
