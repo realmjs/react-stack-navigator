@@ -17,8 +17,14 @@ export function fadeIn() {
 }
 fadeIn.defaultDuration = '0.8s'
 
+export function zoomIn() {
+  return keyframes`from {transform:scale(0)} to {transform:scale(1)}`
+}
+zoomIn.defaultDuration = '0.6s'
+
 export default {
   stub,
   flyIn,
   fadeIn,
+  zoomIn,
 }

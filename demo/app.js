@@ -117,6 +117,7 @@ const YourName = ({ toast }) => {
   function showGetNamePopup() {
     popup
     .get('name')
+    .animate('zoomIn 0.4s')
     .overlay({ opacity: '0.3' })
     .show({name})
     .then((value) => {

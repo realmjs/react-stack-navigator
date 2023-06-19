@@ -4,6 +4,14 @@ import React from 'react'
 
 import PopupOverlay from './PopupOverlay'
 
+import { styled } from 'styled-components'
+
+import animate from '../animation'
+
+const Container = styled.div`
+  animation: ${props => animate[props.animation]()}  ${props => props.duration};
+`
+
 export default class Popup {
 
   constructor(Component, injectedHandler) {
@@ -11,11 +19,18 @@ export default class Popup {
     this.injectedHandler = injectedHandler
   }
 
-  #animate = undefined
-  animate() {}
+  #animation = { type: 'stub', duration: 0 }
+  animate(animation) {
+    const [type, duration] = animation.trim().split(' ').map(x => x.trim())
+    this.#animation = { type, duration }
+    return this
+  }
 
   #props = {}
-  props() {}
+  props() {
+    this.#props = props
+    return this
+  }
 
   #overlay = { opacity: 0.5 }
   overlay({ opacity }) {
@@ -33,16 +48,21 @@ export default class Popup {
         reject: reject,
         render: () => (
           <PopupOverlay {...this.#overlay} >
-          {
-            React.createElement(
-              this.Component,
-              {
-                resolve: this.popupCompletionRoutine('resolve'),
-                reject: this.popupCompletionRoutine('reject'),
-                ...this.#props
-              }
-            )
-          }
+            <Container
+              animation = {this.#animation.type}
+              duration = {this.#animation.duration}
+            >
+            {
+              React.createElement(
+                this.Component,
+                {
+                  resolve: this.popupCompletionRoutine('resolve'),
+                  reject: this.popupCompletionRoutine('reject'),
+                  ...this.#props
+                }
+              )
+            }
+            </Container>
           </PopupOverlay>
         )
       }
@@ -58,7 +78,7 @@ export default class Popup {
       if (this.#popup) {
         this.#popup[action](value)
         this.#popup = undefined
-        this.#animate = undefined
+        this.#animation = { type: 'stub', duration: 0 }
         this.#overlay = { opacity: 0.5 }
         this.#props = {}
         this.injectedHandler.removePopup(this.#popup)
