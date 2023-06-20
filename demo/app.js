@@ -76,7 +76,7 @@ const CustomToast = (props) => {
   }
 }
 
-import Popup from '../src/popup'
+import Popup from '@realmjs/react-popup'
 
 const YourName = ({ toast }) => {
   const stack = useStack()
@@ -170,7 +170,7 @@ const Welcome = ({ name }) => {
   )
 }
 
-import Toast from '../src/toast'
+import Toast from '@realmjs/react-toast'
 const Demo = () => {
   const toast = Toast.useToast()
   return (

@@ -5,7 +5,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { StackContext } from './StackContext'
 
 import { styled } from 'styled-components'
-import animate, { extractAnimation } from './animation'
+import animate, { extractAnimation } from '@realmjs/animate'
 
 const Animation = styled.div`
   position: relative;
