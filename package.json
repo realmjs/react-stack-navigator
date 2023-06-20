@@ -1,5 +1,5 @@
 {
-  "name": "@realmjs/stack-navigator",
+  "name": "@realmjs/react-stack-navigator",
   "version": "1.1.1",
   "description": "Simple Stack Navigator for React application",
   "main": "dist/index.js",
@@ -14,6 +14,14 @@
   ],
   "author": "Duong Nguyen (duongtdn)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/realmjs/react-stack-navigator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/realmjs/react-stack-navigator/issues"
+  },
+  "homepage": "https://github.com/realmjs/react-stack-navigator#readme",
   "dependencies": {
     "@realmjs/animate": "^1.0.0",
     "react": "^18.2.0",
