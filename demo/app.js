@@ -81,7 +81,7 @@ import Popup from '@realmjs/react-popup'
 const YourName = ({ toast }) => {
   const stack = useStack()
   const [name, setName] = useState('Awesome')
-  const popup = Popup.useHandler()
+  const popup = Popup.usePopup()
   const [popupResolveValue, setPopupResolveValue] = useState('')
   return (
     <div>
