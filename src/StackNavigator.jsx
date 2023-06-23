@@ -9,15 +9,16 @@ import animate, { extractAnimation } from '@realmjs/animation-utils'
 
 const Animation = styled.div`
   position: relative;
-  animation: ${props => animate[props.animation](props.options)}  ${props => props.duration};
+  animation: ${props => animate[props.$animation](props.$options)}  ${props => props.$duration};
 `
+Animation.passProps = false
 
 export default function StackNavigator({ stacks }) {
   const propsRef = useRef({})
   const [activeIndex, setActiveIndex] = useState(0)
 
-  const animationRef = useRef({ animation: 'stub' })
-  useEffect(() => { animationRef.current = { animation: 'stub' } }, [activeIndex])
+  const animationRef = useRef({ animation: 'stub', duration: 0 })
+  useEffect(() => { animationRef.current = { animation: 'stub', duration: 0 } }, [activeIndex])
 
   const historyRef = useRef([activeIndex])
 
@@ -32,9 +33,9 @@ export default function StackNavigator({ stacks }) {
             {
               activeIndex === index?
                 <Animation
-                  animation = {animationRef.current.animation}
-                  duration = {animationRef.current.duration}
-                  options = {animationRef.current.options}
+                  $animation = {animationRef.current.animation}
+                  $duration = {animationRef.current.duration}
+                  $options = {animationRef.current.options}
                 >
                   {renderFn(propsRef.current)}
                 </Animation>
