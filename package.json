@@ -1,6 +1,6 @@
 {
   "name": "@realmjs/react-stack-navigator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple Stack Navigator for React application",
   "main": "dist/index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/realmjs/react-stack-navigator#readme",
   "dependencies": {
-    "@realmjs/animate": "^1.0.0",
+    "@realmjs/animation-utils": "^1.0.0",
     "react": "^18.2.0",
     "styled-components": "^6.0.0-rc.3"
   },
