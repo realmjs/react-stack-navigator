@@ -177,10 +177,11 @@ const Demo = () => {
     <div className='w3-container'>
       <h1>Stack Navigator</h1>
       <StackNavigator
-        stacks = {[
-          ['yourname', () => <YourName toast = {toast} />],
-          ['welcome', (props) => <Welcome toast = {toast} {...props} />],
+        routeStack = {[
+          ['yourname', () => <YourName toast = {toast} />, { path: '/', title: 'Your Name' } ],
+          ['welcome', (props) => <Welcome toast = {toast} {...props} />, { path: '/welcome/:name', title: 'Welcome' }],
         ]}
+        fallback = {['fallback', () => <h2>404: Page Not Found</h2>, { path: '/404', title: 'Page not found' }]}
       />
       <Toast.Provider
         toast = {toast}

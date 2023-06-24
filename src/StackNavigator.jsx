@@ -13,40 +13,102 @@ const Animation = styled.div`
 `
 Animation.passProps = false
 
-export default function StackNavigator({ stacks }) {
-  const propsRef = useRef({})
-  const [activeIndex, setActiveIndex] = useState(0)
+import { env, url } from './utils'
+
+/* here the translate of route index to literal */
+const OPTIONS = 2
+
+export default function StackNavigator({ routeStack, fallback }) {
+  const propsRef = useRef(extractPropsfromInitialURL())
+  const [activeIndex, setActiveIndex] = useState(findInitActiveIndex())
 
   const animationRef = useRef({ animation: 'stub', duration: 0 })
   useEffect(() => { animationRef.current = { animation: 'stub', duration: 0 } }, [activeIndex])
+
+  useEffect(() => {
+    if (env.isWeb()) {
+      const route = (activeIndex === -1) ? fallback : routeStack[activeIndex]
+      if ( route[OPTIONS] && route[OPTIONS].title && document) {
+        document.title = route[OPTIONS].title
+      }
+      if ( route[OPTIONS] && route[OPTIONS].path) {
+        const path = url.constructLocationPath(route[OPTIONS].path, propsRef.current)
+        url.path.replace(path)
+      }
+    }
+  }, [activeIndex])
 
   const historyRef = useRef([activeIndex])
 
   const nav = { next, previous, move, back }
 
+  if (activeIndex === -1) return fallback && renderFallback() || renderFirstStack()
+
   return (
     <div>
-      <div>
-      {
-        stacks.map(([id, renderFn], index) => (
-          <StackContext.Provider key = {id} value = {{ ...nav, animate }}>
-            {
-              activeIndex === index?
-                <Animation
-                  $animation = {animationRef.current.animation}
-                  $duration = {animationRef.current.duration}
-                  $options = {animationRef.current.options}
-                >
-                  {renderFn(propsRef.current)}
-                </Animation>
-              : null
-            }
-          </StackContext.Provider >
-        ))
-      }
-      </div>
+    {
+      routeStack.map(
+        ([id, renderFn], index) => renderRoute(makeUniqueRouteId(id, index), renderFn, activeIndex === index)
+      )
+    }
     </div>
   )
+
+  function renderRoute(id, renderFn, shouldRender) {
+    return (
+      <StackContext.Provider key = {id} value = {{ ...nav, animate }}>
+        {
+          shouldRender?
+            <Animation
+              $animation = {animationRef.current.animation}
+              $duration = {animationRef.current.duration}
+              $options = {animationRef.current.options}
+            >
+              {renderFn(propsRef.current)}
+            </Animation>
+          : null
+        }
+      </StackContext.Provider >
+    )
+  }
+
+  function findInitActiveIndex() {
+    const matchedIndex = env.isWeb() && routeStack.findIndex(isMatchWithURL) || 0
+    return (matchedIndex === -1 && !fallback)? 0 : matchedIndex
+  }
+
+  function isMatchWithURL(route) {
+    return  route[OPTIONS] &&
+            route[OPTIONS].path &&
+            url.match(route[OPTIONS].path).isMatched
+
+  }
+
+  function renderFirstStack() {
+    const [id, renderFn] = routeStack[0]
+    const routeId = makeUniqueRouteId(id, 0)
+    return renderRoute(routeId, renderFn, true)
+  }
+
+  function renderFallback() {
+    const [id, renderFn] = fallback
+    const routeId = makeUniqueRouteId(id, -1) // fallback index is considered as -1
+    return renderRoute(routeId, renderFn, true)
+  }
+
+  function makeUniqueRouteId(id, index) {
+    return `${id}.${index}`
+  }
+
+  function extractPropsfromInitialURL() {
+    if (env.isWeb()) {
+      const activeIndex = findInitActiveIndex()
+      const route = (activeIndex === -1)? fallback : routeStack[activeIndex]
+      return route[OPTIONS] && route[OPTIONS].path && url.match(route[OPTIONS].path).params || {}
+    } else {
+      return {}
+    }
+  }
 
   function next(props) {
     move(activeIndex + 1, props)
@@ -58,12 +120,12 @@ export default function StackNavigator({ stacks }) {
 
   function move(id, props) {
     const index = (typeof id === 'number') ? id : findStackIndexFromId(id)
-    if (index > -1 && index < stacks.length) {
+    if (index > -1 && index < routeStack.length) {
       addPropsToPropsRef(props)
       setActiveIndex(index)
       historyRef.current.push(index)
     } else {
-      throw new Error(`Cannot find stack ${id}`)
+      throw new Error(`Cannot find route ${id}`)
     }
   }
 
@@ -76,7 +138,7 @@ export default function StackNavigator({ stacks }) {
   }
 
   function findStackIndexFromId(id) {
-    return stacks.findIndex(stack => stack[0] === id)
+    return routeStack.findIndex(route => route[0] === id)
   }
 
   function addPropsToPropsRef(props) {
