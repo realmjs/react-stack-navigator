@@ -47,6 +47,8 @@ The StackNavigator component accepts the following props:
 
 - `fallback` (array): An array representing the fallback route configuration. The fallback configuration consists of three elements: `[routeId, renderFunction, options]`. This route will be used when there is no matching route in the `routeStack` for the initial URL. The `routeId` is a unique identifier for the fallback route, the `renderFunction` is the function that renders the component for the fallback route, and `options` (optional) is an object that can include a `path` and a `title` for the fallback route.
 
+- `onStackReady` (callback): The `stack` handler will be passed to the callback after its ready.
+
 ## Stack API
 
 The StackNavigator component exposes the following APIs through the `useStack` hook:
