@@ -18,7 +18,7 @@ import { env, url } from './utils'
 /* here the translate of route index to literal */
 const OPTIONS = 2
 
-export default function StackNavigator({ routeStack, fallback }) {
+export default function StackNavigator({ routeStack, fallback, onStackReady }) {
   const propsRef = useRef(extractPropsfromInitialURL())
   const [activeIndex, setActiveIndex] = useState(findInitActiveIndex())
 
@@ -41,6 +41,10 @@ export default function StackNavigator({ routeStack, fallback }) {
   const historyRef = useRef([activeIndex])
 
   const nav = { next, previous, move, back }
+
+  useEffect(() => {
+    onStackReady && onStackReady({ ...nav, animate })
+  }, [])
 
   if (activeIndex === -1) return fallback && renderFallback() || renderFirstStack()
 
