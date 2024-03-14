@@ -1,6 +1,6 @@
 "use strict"
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, Suspense } from 'react'
 
 import { StackContext } from './StackContext'
 
@@ -52,7 +52,14 @@ export default function StackNavigator({ routeStack, fallback, onStackReady }) {
     <div>
     {
       routeStack.map(
-        ([id, renderFn], index) => renderRoute(makeUniqueRouteId(id, index), renderFn, activeIndex === index)
+        ([id, renderFn], index) => {
+          const uniqueRouteId = makeUniqueRouteId(id, index);
+          return (
+            <Suspense fallback={<div>Loading... </div>} key = {uniqueRouteId}>
+              {[renderRoute(uniqueRouteId, renderFn, activeIndex === index)]}
+            </Suspense>
+          )
+        }
       )
     }
     </div>
