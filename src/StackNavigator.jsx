@@ -55,7 +55,7 @@ export default function StackNavigator({ routeStack, fallback, onStackReady }) {
         ([id, renderFn], index) => {
           const uniqueRouteId = makeUniqueRouteId(id, index);
           return (
-            <Suspense fallback={<div>Loading... </div>} key = {uniqueRouteId}>
+            <Suspense key = {uniqueRouteId}>
               {[renderRoute(uniqueRouteId, renderFn, activeIndex === index)]}
             </Suspense>
           )
