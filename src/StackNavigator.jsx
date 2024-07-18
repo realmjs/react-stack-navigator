@@ -19,7 +19,7 @@ import { env, url } from './utils'
 const OPTIONS = 2
 
 export default function StackNavigator({ routeStack, fallback, onStackReady }) {
-  const propsRef = useRef(extractPropsfromInitialURL())
+  const [params, setParams] = useState(extractParamsFromInitialURL())
   const [activeIndex, setActiveIndex] = useState(findInitActiveIndex())
 
   const animationRef = useRef({ animation: 'stub', duration: 0 })
@@ -32,11 +32,11 @@ export default function StackNavigator({ routeStack, fallback, onStackReady }) {
         document.title = route[OPTIONS].title
       }
       if ( route[OPTIONS] && route[OPTIONS].path) {
-        const path = url.constructLocationPath(route[OPTIONS].path, propsRef.current)
+        const path = url.constructLocationPath(route[OPTIONS].path, params)
         url.path.replace(path)
       }
     }
-  }, [activeIndex])
+  }, [activeIndex, params])
 
   const historyRef = useRef([activeIndex])
 
@@ -75,7 +75,7 @@ export default function StackNavigator({ routeStack, fallback, onStackReady }) {
               $duration = {animationRef.current.duration}
               $options = {animationRef.current.options}
             >
-              {renderFn(propsRef.current)}
+              {renderFn(params)}
             </Animation>
           : null
         }
@@ -111,7 +111,7 @@ export default function StackNavigator({ routeStack, fallback, onStackReady }) {
     return `${id}.${index}`
   }
 
-  function extractPropsfromInitialURL() {
+  function extractParamsFromInitialURL() {
     if (env.isWeb()) {
       const activeIndex = findInitActiveIndex()
       const route = (activeIndex === -1)? fallback : routeStack[activeIndex]
@@ -132,7 +132,7 @@ export default function StackNavigator({ routeStack, fallback, onStackReady }) {
   function move(id, props) {
     const index = (typeof id === 'number') ? id : findStackIndexFromId(id)
     if (index > -1 && index < routeStack.length) {
-      addPropsToPropsRef(props)
+      addPropsToParams(props)
       setActiveIndex(index)
       historyRef.current.push(index)
     } else {
@@ -152,10 +152,12 @@ export default function StackNavigator({ routeStack, fallback, onStackReady }) {
     return routeStack.findIndex(route => route[0] === id)
   }
 
-  function addPropsToPropsRef(props) {
+  function addPropsToParams(props) {
+    const _params = {...params}
     for (let key in props) {
-      propsRef.current[key] = props[key]
+      _params[key] = props[key]
     }
+    setParams(_params)
   }
 
   function animate(animation, options) {
